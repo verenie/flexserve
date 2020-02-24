@@ -44,3 +44,15 @@ a call to the <i>batch</i> endpoint with two models deployed and six images sent
 {'densenet169ACFEf0.pt': ['ALPHA', 'BETA', 'BETA', 'BETA', 'ALPHA', 'ALPHA'], 
 'resnet34SEFEf2.pt': ['ALPHA', 'BETA', 'ALPHA', 'ALPHA', 'ALPHA', 'ALPHA']}
 ```
+# Deploy to production with Gunicorn
+1. Install Gunicorn
+2. Depending on your deployment demands and availability of GPUs on the target deployment hardware, follow
+these guidlines of Gunicorn <b>workers</b> and <b>threads</b>: Each worker can have multiple threads, where each thread spawned by the worker will share the same memory space.
+3. Create 1 worker with 10 threads:
+```console
+gunicorn server:app -w 1 --threads 10
+```
+4. Create 2 workers (requires 2 GPU's for CUDA inference or multiple CPU cores for CPU inference) for multiprocessing:
+```console
+gunicorn server:app -w 2
+```
